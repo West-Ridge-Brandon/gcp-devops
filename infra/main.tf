@@ -39,6 +39,12 @@ resource "google_storage_bucket" "bucket" {
   location = var.region
 }
 
+resource "google_storage_bucket_iam_member" "vm_sa_bucket_access" {
+  bucket = google_storage_bucket.bucket.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.vm_service_account.email}"
+}
+
 ############################################
 # Compute Instance
 ############################################
@@ -59,6 +65,11 @@ resource "google_compute_instance" "vm" {
 
     access_config {} # assigns external IP
   }
+
+  service_account {
+  email  = google_service_account.vm_service_account.email
+  scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+}
 
   tags = var.instance_tags
 }

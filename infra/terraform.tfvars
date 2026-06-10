@@ -15,7 +15,7 @@ firewall_ports         = ["22"]
 firewall_source_ranges = ["0.0.0.0/0"]
 
 # Bucket
-bucket_name = "demo-bucket-123"
+bucket_name = "demo-bucket-123abc-test"
 
 # Instance
 instance_name  = "demo-instance"
