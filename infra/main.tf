@@ -66,7 +66,7 @@ resource "google_compute_instance" "vm" {
 ############################################
 # Service Account
 ############################################
-resource "google_service_account" "vm_sa" {
-  account_id   = var.sa_id
-  display_name = var.sa_name
+resource "google_service_account" "vm_service_account" {
+  account_id   = var.vm_service_account_id
+  display_name = var.vm_service_account_name
 }
