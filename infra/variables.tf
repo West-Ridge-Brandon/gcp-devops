@@ -24,5 +24,5 @@ variable "instance_image" { type = string }
 variable "instance_tags"  { type = list(string) }
 
 # Service Account
-variable "sa_id"   { type = string }
-variable "sa_name" { type = string }
+variable "vm_service_account_id"   { type = string }
+variable "vm_service_account_name" { type = string }
