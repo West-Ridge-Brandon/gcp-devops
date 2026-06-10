@@ -1,72 +1,64 @@
-# -------------------------
-# Networking - 1
-# -------------------------
+############################################
+# VPC Network
+############################################
 resource "google_compute_network" "vpc" {
-  name = "demo-vpc"
+  name                    = var.vpc_name
+  auto_create_subnetworks = false
 }
 
+############################################
+# Subnet
+############################################
 resource "google_compute_subnetwork" "subnet" {
-  name          = "demo-subnet"
-  ip_cidr_range = "10.0.1.0/24"
+  name          = var.subnet_name
+  ip_cidr_range = var.subnet_cidr
   region        = var.region
   network       = google_compute_network.vpc.id
 }
 
-resource "google_compute_firewall" "allow_ssh" {
-  name    = "allow-ssh"
+############################################
+# Firewall Rule
+############################################
+resource "google_compute_firewall" "firewall" {
+  name    = var.firewall_name
   network = google_compute_network.vpc.name
 
   allow {
-    protocol = "tcp"
-    ports    = ["22"]
+    protocol = var.firewall_protocol
+    ports    = var.firewall_ports
   }
 
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = var.firewall_source_ranges
 }
 
-# -------------------------
-# Compute Engine Instance - 2
-# -------------------------
-resource "google_compute_instance" "vm" {
-  name         = var.instance_name
-  machine_type = "e2-micro"
-  zone         = var.zone
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-12"
-    }
-  }
-
-  network_interface {
-    subnetwork = google_compute_subnetwork.subnet.id
-    access_config {}
-  }
-
-  service_account {
-    email  = google_service_account.sa.email
-    scopes = ["cloud-platform"]
-  }
-}
-
-# -------------------------
-# Storage - 3
-# -------------------------
+############################################
+# Storage Bucket
+############################################
 resource "google_storage_bucket" "bucket" {
   name     = var.bucket_name
   location = var.region
 }
 
-# -------------------------
-# IAM + Service Account - 4
-# -------------------------
-resource "google_service_account" "sa" {
-  account_id   = "demo-sa"
-  display_name = "Demo Service Account"
-}
+############################################
+# Compute Instance
+############################################
+resource "google_compute_instance" "vm" {
+  name         = var.instance_name
+  machine_type = var.machine_type
+  zone         = var.zone
 
-resource "google_storage_bucket_iam_member" "sa_bucket_access" {
-  bucket = google_storage_bucket.bucket.name
-  role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.sa.email}"
+  boot_disk {
+    initialize_params {
+      image = var.instance_image
+    }
+  }
+
+  network_interface {
+    network    = google_compute_network.vpc.id
+    subnetwork = google_compute_subnetwork.subnet.id
+
+    access_config {} # assigns external IP
+  }
+
+  tags = var.instance_tags
 }
