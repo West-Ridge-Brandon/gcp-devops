@@ -22,3 +22,10 @@ instance_name  = "demo-instance"
 machine_type   = "e2-micro"
 instance_image = "debian-cloud/debian-12"
 instance_tags  = ["ssh"]
+
+# Service Account
+sa_id = "vm-sa"
+sa_name = "Service account for VM accessing GCS"
+
+# Only the ID is used to make the email account: vm-sa@PROJECT_ID.iam.gserviceaccount.com
+# sa_name is only used to help identify it in a list
