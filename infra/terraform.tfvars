@@ -1,5 +1,5 @@
 # Core
-project_id = "my-test-project-123"
+project_id = "919900949320"
 region     = "us-central1"
 zone       = "us-central1-a"
 
