@@ -14,4 +14,4 @@ output "Instance-External-IP"  { value = google_compute_instance.vm.network_inte
 
 output "Bucket-Name"           { value = google_storage_bucket.bucket.name }
 
-output "Service-Account-Email" { value = google_service_account.vm_sa.account_id }
+output "Service-Account-Email" { value = google_service_account.vm_service_account.email }
