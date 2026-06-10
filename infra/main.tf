@@ -62,3 +62,11 @@ resource "google_compute_instance" "vm" {
 
   tags = var.instance_tags
 }
+
+############################################
+# Service Account
+############################################
+resource "google_service_account" "vm_sa" {
+  account_id   = var.sa_id
+  display_name = var.sa_name
+}
